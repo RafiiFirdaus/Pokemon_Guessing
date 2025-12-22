@@ -40,6 +40,39 @@ function getPokemon() {
   document.getElementById("pokemonImage").style.filter = "blur(5px)";
 }
 
+// Function popup
+function showPopup(isCorrect, pokemonName) {
+  const popupOverlay = document.getElementById("popupOverlay");
+  const popupContainer = document.getElementById("popupContainer");
+  const popupIcon = document.getElementById("popupIcon");
+  const popupMessage = document.getElementById("popupMessage");
+  const popupPokemonName = document.getElementById("popupPokemonName");
+
+  // Reset classes
+  popupContainer.classList.remove("correct", "incorrect");
+
+  if (isCorrect) {
+    popupContainer.classList.add("correct");
+    popupIcon.textContent = "✓";
+    popupMessage.textContent = "Correct!";
+    popupPokemonName.textContent = `It's ${pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)}!`;
+  } else {
+    popupContainer.classList.add("incorrect");
+    popupIcon.textContent = "✗";
+    popupMessage.textContent = "Incorrect!";
+    popupPokemonName.textContent = "Try again!";
+  }
+
+  // Show popup
+  popupOverlay.classList.add("show");
+
+  // Hide popup after delay
+  setTimeout(() => {
+    popupOverlay.classList.remove("show");
+  }, 1500);
+}
+
+
 // Function to check the player's guess
 function checkGuess() {
   const guessInput = document.getElementById("guessInput");
@@ -53,9 +86,11 @@ function checkGuess() {
     resultMessage.textContent = `Correct! It's ${correctName.charAt(0).toUpperCase() + correctName.slice(1)}!`;
     resultMessage.style.color = "green";
 
+    // Show popup animation
+    showPopup(true, correctName);
+
     // Clear the input box after correct guess
     guessInput.value = "";
-
 
     // Load a new Pokémon after a short delay
     setTimeout(getPokemon, 2000);
@@ -63,5 +98,8 @@ function checkGuess() {
     // If the guess is incorrect, display a message to try again
     resultMessage.textContent = "Incorrect! Try again.";
     resultMessage.style.color = "red";
+
+    // Show popup animation
+    showPopup(false, correctName);
   }
 }
